@@ -83,8 +83,11 @@ app.get("/:id", async (req, res) => {
 
   const player = players.find((p) => p.id === id);
 
-  if (!player) return res.status(404).json({ message: "Player not found" });
+  if (!player) {
+    return res.status(404).json({ message: "Player not found" });
+  }
 
+  res.set("Cache-Control", "public, max-age=300");
   res.status(200).json(player);
 });
 
@@ -109,6 +112,7 @@ app.get("/", async (req, res) => {
   const data = await fs.readFile(dbLocation);
   const players = JSON.parse(data);
 
+  res.set("Cache-Control", "public, max-age=300");
   res.status(200).json(players);
 });
 
